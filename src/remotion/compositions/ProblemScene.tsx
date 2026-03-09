@@ -1,6 +1,6 @@
 import React from "react";
 import { AbsoluteFill, useCurrentFrame, useVideoConfig, spring, interpolate, Easing } from "remotion";
-import { BlurReveal } from "../library/components/text/TextAnimation";
+import { FadeInWords } from "../library/components/text/TextAnimation";
 
 export const ProblemScene: React.FC = () => {
   const frame = useCurrentFrame();
@@ -26,29 +26,30 @@ export const ProblemScene: React.FC = () => {
 
   return (
     <AbsoluteFill style={{ justifyContent: "center", alignItems: "center" }}>
-      <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 40, maxWidth: 1100, padding: "0 80px" }}>
-        {/* Main headline */}
-        <BlurReveal
+      <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 40, maxWidth: 1200, padding: "0 100px" }}>
+        {/* Main headline - single line to prevent word break */}
+        <FadeInWords
           startFrom={8}
-          stagger={0.04}
-          duration={0.7}
+          stagger={0.07}
+          duration={0.6}
+          ease="power3.out"
           style={{
-            fontSize: 64,
+            fontSize: 58,
             fontWeight: 700,
             color: "#FFFFFF",
             textAlign: "center",
-            lineHeight: 1.2,
-            textWrap: "balance",
+            lineHeight: 1.25,
+            whiteSpace: "nowrap",
           }}
         >
           Your emails deserve to reach humans
-        </BlurReveal>
+        </FadeInWords>
 
         {/* Spam vs Inbox */}
-        <div style={{ display: "flex", alignItems: "center", gap: 32, marginTop: 16 }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 40, marginTop: 16 }}>
           {/* Spam - crossed out */}
           <div style={{ position: "relative", opacity: iconOpacity }}>
-            <span style={{ fontSize: 36, fontWeight: 600, color: "rgba(255,255,255,0.4)" }}>
+            <span style={{ fontSize: 38, fontWeight: 600, color: "rgba(255,255,255,0.4)", fontFamily: "monospace" }}>
               spam folders
             </span>
             <div
@@ -60,12 +61,13 @@ export const ProblemScene: React.FC = () => {
                 height: 3,
                 backgroundColor: "#ef4444",
                 transform: "translateY(-50%)",
+                boxShadow: "0 0 12px rgba(239,68,68,0.5)",
               }}
             />
           </div>
 
           {/* Arrow */}
-          <div style={{ opacity: arrowOpacity, transform: `translateX(${arrowX}px)`, fontSize: 32, color: "#00A3FF" }}>
+          <div style={{ opacity: arrowOpacity, transform: `translateX(${arrowX}px)`, fontSize: 36, color: "#00A3FF" }}>
             →
           </div>
 
@@ -73,10 +75,11 @@ export const ProblemScene: React.FC = () => {
           <div style={{ opacity: inboxOpacity, transform: `scale(${inboxScale})` }}>
             <span
               style={{
-                fontSize: 36,
+                fontSize: 38,
                 fontWeight: 700,
                 color: "#00A3FF",
-                textShadow: "0 0 30px rgba(0,163,255,0.4)",
+                fontFamily: "monospace",
+                textShadow: "0 0 30px rgba(0,163,255,0.5), 0 0 60px rgba(0,163,255,0.2)",
               }}
             >
               the inbox

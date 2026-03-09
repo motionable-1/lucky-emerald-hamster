@@ -29,11 +29,11 @@ export const CodeIntegrationScene: React.FC = () => {
   const windowOpacity = interpolate(frame, [10, 20], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
 
   // Language tabs
-  const tabsOpacity = interpolate(frame, [100, 115], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+  const tabsOpacity = interpolate(frame, [110, 125], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
 
   // Success badge
-  const badgeScale = spring({ frame, fps, config: { damping: 10, mass: 0.6 }, delay: 110 });
-  const badgeOpacity = interpolate(frame, [110, 120], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+  const badgeScale = spring({ frame, fps, config: { damping: 10, mass: 0.6 }, delay: 120 });
+  const badgeOpacity = interpolate(frame, [120, 130], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
 
   return (
     <AbsoluteFill style={{ justifyContent: "center", alignItems: "center" }}>
@@ -61,29 +61,32 @@ export const CodeIntegrationScene: React.FC = () => {
           style={{
             opacity: windowOpacity,
             transform: `scale(${windowScale})`,
-            background: "rgba(15, 15, 25, 0.9)",
-            border: "1px solid rgba(0,163,255,0.2)",
+            background: "linear-gradient(145deg, rgba(15,15,25,0.95), rgba(8,8,18,0.98))",
+            border: "1px solid rgba(0,163,255,0.15)",
             borderRadius: 16,
             overflow: "hidden",
-            boxShadow: "0 25px 80px rgba(0,0,0,0.5), 0 0 40px rgba(0,163,255,0.08)",
+            boxShadow: "0 30px 90px rgba(0,0,0,0.6), 0 0 50px rgba(0,163,255,0.06), inset 0 1px 0 rgba(255,255,255,0.04)",
           }}
         >
           {/* Window chrome */}
-          <div style={{ display: "flex", alignItems: "center", gap: 8, padding: "14px 20px", borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 8, padding: "16px 22px", borderBottom: "1px solid rgba(255,255,255,0.06)", background: "rgba(255,255,255,0.02)" }}>
             <div style={{ width: 12, height: 12, borderRadius: "50%", backgroundColor: "#ff5f57" }} />
             <div style={{ width: 12, height: 12, borderRadius: "50%", backgroundColor: "#ffbd2e" }} />
             <div style={{ width: 12, height: 12, borderRadius: "50%", backgroundColor: "#28ca42" }} />
-            <span style={{ marginLeft: 16, fontSize: 13, color: "rgba(255,255,255,0.35)", fontFamily: "monospace" }}>send-email.ts</span>
+            <span style={{ marginLeft: 16, fontSize: 14, color: "rgba(255,255,255,0.3)", fontFamily: "monospace" }}>send-email.ts</span>
           </div>
 
-          {/* Code content */}
-          <div style={{ padding: "24px 28px", fontFamily: "monospace", fontSize: 18, lineHeight: 1.8 }}>
+          {/* Code content with line numbers */}
+          <div style={{ padding: "24px 0", fontFamily: "monospace", fontSize: 19, lineHeight: 1.85 }}>
             {CODE_LINES.map((line, i) => {
-              const lineDelay = 18 + i * 5;
-              const lineOpacity = interpolate(frame, [lineDelay, lineDelay + 8], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
-              const lineX = interpolate(frame, [lineDelay, lineDelay + 10], [15, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp", easing: Easing.out(Easing.cubic) });
+              // Slower stagger for readability - 8 frames between each line
+              const lineDelay = 22 + i * 8;
+              const lineOpacity = interpolate(frame, [lineDelay, lineDelay + 12], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+              const lineX = interpolate(frame, [lineDelay, lineDelay + 14], [20, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp", easing: Easing.out(Easing.cubic) });
 
-              if (!line.text) return <div key={i} style={{ height: 12 }} />;
+              if (!line.text) return <div key={i} style={{ height: 14 }} />;
+
+              const lineNum = i + 1;
 
               return (
                 <div
@@ -91,11 +94,17 @@ export const CodeIntegrationScene: React.FC = () => {
                   style={{
                     opacity: lineOpacity,
                     transform: `translateX(${lineX}px)`,
-                    color: line.color,
-                    whiteSpace: "pre",
+                    display: "flex",
+                    alignItems: "center",
+                    padding: "0 28px 0 0",
                   }}
                 >
-                  {line.text}
+                  <span style={{ width: 48, textAlign: "right", color: "rgba(255,255,255,0.15)", fontSize: 14, paddingRight: 16, flexShrink: 0 }}>
+                    {lineNum}
+                  </span>
+                  <span style={{ color: line.color, whiteSpace: "pre" }}>
+                    {line.text}
+                  </span>
                 </div>
               );
             })}
@@ -106,7 +115,7 @@ export const CodeIntegrationScene: React.FC = () => {
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
           <div style={{ display: "flex", gap: 12, opacity: tabsOpacity }}>
             {["Node.js", "Python", "Ruby", "Go", "cURL"].map((lang, i) => {
-              const tabDelay = 100 + i * 4;
+              const tabDelay = 110 + i * 4;
               const tabScale = spring({ frame, fps, config: { damping: 12 }, delay: tabDelay });
               return (
                 <div
@@ -115,9 +124,9 @@ export const CodeIntegrationScene: React.FC = () => {
                     transform: `scale(${tabScale})`,
                     padding: "8px 18px",
                     borderRadius: 8,
-                    backgroundColor: i === 0 ? "rgba(0,163,255,0.2)" : "rgba(255,255,255,0.06)",
-                    border: i === 0 ? "1px solid rgba(0,163,255,0.4)" : "1px solid rgba(255,255,255,0.08)",
-                    color: i === 0 ? "#00A3FF" : "rgba(255,255,255,0.5)",
+                    backgroundColor: i === 0 ? "rgba(0,163,255,0.15)" : "rgba(255,255,255,0.04)",
+                    border: i === 0 ? "1px solid rgba(0,163,255,0.35)" : "1px solid rgba(255,255,255,0.06)",
+                    color: i === 0 ? "#00A3FF" : "rgba(255,255,255,0.4)",
                     fontSize: 14,
                     fontWeight: 500,
                   }}
@@ -128,8 +137,8 @@ export const CodeIntegrationScene: React.FC = () => {
             })}
           </div>
 
-          {/* 3 lines of code badge */}
-          <div style={{ opacity: badgeOpacity, transform: `scale(${badgeScale})`, display: "flex", alignItems: "center", gap: 10, padding: "10px 20px", borderRadius: 10, backgroundColor: "rgba(34,197,94,0.12)", border: "1px solid rgba(34,197,94,0.3)" }}>
+          {/* Success badge */}
+          <div style={{ opacity: badgeOpacity, transform: `scale(${badgeScale})`, display: "flex", alignItems: "center", gap: 10, padding: "10px 22px", borderRadius: 10, backgroundColor: "rgba(34,197,94,0.1)", border: "1px solid rgba(34,197,94,0.25)" }}>
             <Img
               src="https://api.iconify.design/lucide/check-circle.svg?color=%2322c55e&width=24"
               width={24}
